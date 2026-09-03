@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shadow Alarm: Interactive Light and Sound Alert System</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm 15mm;
+            background-color: #f8f9fa;
+        }
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #111827;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        header {
+            border-bottom: 3px solid #1d4ed8;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        h1 {
+            font-size: 26pt;
+            color: #111827;
+            margin: 0 0 10px 0;
+        }
+        .subtitle {
+            font-size: 14pt;
+            color: #4b5563;
+            margin: 0;
+        }
+        h2 {
+            font-size: 16pt;
+            color: #1e40af;
+            border-left: 4px solid #1d4ed8;
+            padding-left: 10px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        p {
+            margin: 0 0 15px 0;
+            font-size: 11pt;
+            color: #1f2937;
+        }
+        .step {
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+        }
+        .step-title {
+            font-weight: bold;
+            color: #111827;
+            font-size: 12pt;
+            margin-bottom: 5px;
+        }
+        strong {
+            color: #111827;
+            font-weight: 600;
+        }
+        .code-box {
+            background: #0f172a;
+            color: #f8fafc;
+            font-family: "Courier New", Courier, monospace;
+            padding: 20px;
+            border-radius: 6px;
+            font-size: 9.5pt;
+            overflow-x: auto;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+        }
+        .keyword { color: #f472b6; font-weight: bold; }
+        .type { color: #60a5fa; font-weight: bold; }
+        .number { color: #34d399; font-weight: bold; }
+        .function { color: #38bdf8; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Shadow Alarm: Interactive Light and Sound Alert System</h1>
+        <p class="subtitle">A Step-by-Step Arduino Starter Project Using Kit 1</p>
+    </header>
+
+    <p>Build an interactive alert system using components from Kit 1. This project reads ambient light levels using a photoresistor. When someone casts a shadow or blocks the light, the Arduino triggers a multi-tone alarm through a passive buzzer.</p>
+
+    <h2>Step-by-Step Assembly Guide</h2>
+
+    <div class="step">
+        <div class="step-title">Step 1: Gather Your Components</div>
+        <p>Collect your Arduino Uno R3, USB cable, breadboard, photoresistor, passive buzzer, one 220-ohm resistor (used in place of the 10-ohm for better sensitivity), and several connector wires from Kit 1.</p>
+    </div>
+
+    <div class="step">
+        <div class="step-title">Step 2: Connect Power to the Breadboard</div>
+        <p>Plug a wire from the <strong>5V</strong> pin on the Arduino to the positive rail of your breadboard, and a wire from a <strong>GND</strong> pin to the negative rail.</p>
+    </div>
+
+    <div class="step">
+        <div class="step-title">Step 3: Wire the Photoresistor Circuit</div>
+        <p>1. Insert the photoresistor into two separate rows on the breadboard.<br>
+           2. Connect one leg of the photoresistor to the <strong>5V</strong> power rail.<br>
+           3. Connect the other leg to <strong>Analog Pin A0</strong> on the Arduino.<br>
+           4. Connect a <strong>220-ohm resistor</strong> from that same photoresistor leg over to the <strong>GND</strong> rail to complete the voltage divider.</p>
+    </div>
+
+    <div class="step">
+        <div class="step-title">Step 4: Wire the Passive Buzzer</div>
+        <p>1. Insert the passive buzzer into the breadboard.<br>
+           2. Connect the positive (longer) leg to <strong>Digital Pin 8</strong> on the Arduino.<br>
+           3. Connect the negative (shorter) leg to the <strong>GND</strong> rail.</p>
+    </div>
+
+    <div class="step">
+        <div class="step-title">Step 5: Upload the Code</div>
+        <p>Connect your Arduino Uno to your computer via USB, open the Arduino IDE, paste the code below, select your board and port, and click Upload. Open the Serial Monitor at 9600 baud to test blocking the sensor.</p>
+    </div>
+
+    <h2>Arduino Sketch</h2>
+    <div class="code-box"><span class="type">const</span> <span class="type">int</span> photoPin = A0;   
+<span class="type">const</span> <span class="type">int</span> buzzerPin = <span class="number">8</span>;   
+<span class="type">int</span> threshold = <span class="number">500</span>;       
+
+<span class="type">void</span> <span class="function">setup</span>() {
+  <span class="function">pinMode</span>(buzzerPin, OUTPUT);
+  Serial.<span class="function">begin</span>(<span class="number">9600</span>);
+}
+
+<span class="type">void</span> <span class="function">loop</span>() {
+  <span class="type">int</span> lightLevel = <span class="function">analogRead</span>(photoPin);
+  Serial.<span class="function">print</span>(<span class="string">"Light Level: "</span>);
+  Serial.<span class="function">println</span>(lightLevel);
+
+  <span class="keyword">if</span> (lightLevel &lt; threshold) {
+    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1000</span>; i &lt;= <span class="number">2000</span>; i += <span class="number">100</span>) {
+      <span class="function">tone</span>(buzzerPin, i, <span class="number">100</span>);
+      <span class="function">delay</span>(<span class="number">50</span>);
+    }
+  } <span class="keyword">else</span> {
+    <span class="function">noTone</span>(buzzerPin); 
+  }
+  
+  <span class="function">delay</span>(<span class="number">200</span>);
+}</div>
+
+</div>
+
+</body>
+</html>
